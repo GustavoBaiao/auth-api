@@ -17,6 +17,9 @@ public record UserResponseDTO(
         @Schema(description = "The email of the user")
         String email,
 
+        @Schema(description = "Indicates if the user has accepted the terms and conditions")
+        Boolean termsAccepted,
+
         @Schema(description = "The date and time the user was created")
         LocalDateTime createdAt
 ) {
