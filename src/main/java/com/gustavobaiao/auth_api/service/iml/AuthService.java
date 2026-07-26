@@ -11,6 +11,7 @@ import com.gustavobaiao.auth_api.exception.TermsNotAcceptedException;
 import com.gustavobaiao.auth_api.mapper.IUserMapper;
 import com.gustavobaiao.auth_api.repository.IUserRepository;
 import com.gustavobaiao.auth_api.service.IAuthService;
+import com.gustavobaiao.auth_api.service.IJwtService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -28,6 +29,8 @@ public class AuthService implements IAuthService {
     private final IUserMapper userMapper;
 
     private final PasswordEncoder passwordEncoder;
+
+    private final IJwtService jwtService;
 
     @Override
     public UserResponseDTO register(CreateUserRequestDTO request) {
@@ -51,17 +54,19 @@ public class AuthService implements IAuthService {
 
         if (!passwordEncoder.matches(request.password(), user.getPassword())) {
             log.info("Passwords do not match");
-            throw new InvalidCredentialsException("Email ou senha inválidos");
+            throw new InvalidCredentialsException("senha inválida");
         }
         log.info("Login successful for user: {}", request.email());
 
-        return new LoginResponseDTO("Login realizado com sucesso");
+        var token = jwtService.generateToken(user.getEmail());
+
+        return new LoginResponseDTO(token);
     }
 
     private UserEntity findUserByEmail(LoginRequestDTO request) {
         return userRepository.findByEmail(request.email())
                 .orElseThrow(() ->
-                        new InvalidCredentialsException("Email ou senha inválidos"));
+                        new InvalidCredentialsException("Email não encontrado"));
     }
 
     private void validateTermsAccepted(CreateUserRequestDTO request) {

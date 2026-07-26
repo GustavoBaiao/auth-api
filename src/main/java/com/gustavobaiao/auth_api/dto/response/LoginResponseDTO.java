@@ -5,7 +5,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 public record LoginResponseDTO(
 
         @Schema(description = "The message for the login response")
-        String message
+        String token
 
 ) {
 }
