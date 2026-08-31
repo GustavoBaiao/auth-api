@@ -14,7 +14,7 @@ Projeto desenvolvido como uma API backend seguindo boas práticas de organizaç�
 - Spring Data JPA
 - PostgreSQL
 - Hibernate
-- JWT (JSON Web Token)
+- JWT 
 - BCrypt
 - MapStruct
 - Maven
